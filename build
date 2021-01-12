@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e
+
+EL=7
+VERSION=8.9.10
+: "${REGISTRY:=hub.docker.com}"
+
+TAG=opensciencegrid/flock-negotiator:${VERSION}-el${EL}
+
+docker build \
+    --build-arg BUILDDATE="$(date +%Y%m%d)" \
+    --build-arg EL=$EL \
+    --build-arg VERSION=$VERSION \
+    -t $TAG \
+    .
+
+docker tag $TAG $REGISTRY/$TAG
+docker push $REGISTRY/$TAG
+docker rmi $REGISTRY/$TAG
